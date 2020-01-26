@@ -11,7 +11,10 @@
         private static void Main(string[] args)
         {
             Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Debug().WriteTo.ColoredConsole()
+                .MinimumLevel
+                .Debug()
+                .WriteTo
+                .ColoredConsole()
                 .CreateLogger();
 
             //setup our DI, AddTransient() because we need one different instance per using statement
