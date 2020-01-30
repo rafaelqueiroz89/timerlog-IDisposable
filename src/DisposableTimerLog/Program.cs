@@ -1,18 +1,17 @@
 ﻿namespace DisposableTimerLog
 {
-    using System.Threading;
+    using System;
 
     using Microsoft.Extensions.DependencyInjection;
 
     using Serilog;
 
-    internal class Program
+    internal static class Program
     {
-        private static void Main(string[] args)
+        private static void Main()
         {
             Log.Logger = new LoggerConfiguration()
-                .MinimumLevel
-                .Debug()
+                .MinimumLevel.Debug()
                 .WriteTo
                 .ColoredConsole()
                 .CreateLogger();
@@ -23,15 +22,19 @@
                                 .BuildServiceProvider();
 
             var transientTimerLog = serviceProvider.GetService<ITimerLog>();
+            transientTimerLog.Start().OnAction("First call");//Forces a first call to ensure that JIT has done its job
+            transientTimerLog.Dispose();
 
-            using (transientTimerLog.Start().OnAction("asdgyagdyagsydgady"))
+            using (transientTimerLog.Start().OnAction("String.Format('') time for formatting "))
             {
-                Thread.Sleep(150);
+                decimal d = 150.0m;
+                _ = d.ToString();
             }
 
-            using (transientTimerLog.Start().OnAction("asfasf"))
+            using (transientTimerLog.Start().OnAction("String.Format('') time for formatting "))
             {
-                Thread.Sleep(250);
+                decimal d = 150.0m;
+                _ = String.Format("{0}", d);
             }
         }
     }
