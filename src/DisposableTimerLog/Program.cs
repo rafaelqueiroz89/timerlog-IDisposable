@@ -1,6 +1,6 @@
 ﻿namespace DisposableTimerLog
 {
-    using System;
+    using System.Threading;
 
     using Microsoft.Extensions.DependencyInjection;
 
@@ -25,16 +25,14 @@
             transientTimerLog.Start().OnAction("First call");//Forces a first call to ensure that JIT has done its job
             transientTimerLog.Dispose();
 
-            using (transientTimerLog.Start().OnAction("String.Format('') time for formatting "))
+            using (transientTimerLog.Start().OnAction("Teste1"))
             {
-                decimal d = 150.0m;
-                _ = d.ToString();
+                Thread.Sleep(250);
             }
 
-            using (transientTimerLog.Start().OnAction("String.Format('') time for formatting "))
+            using (transientTimerLog.Start().OnAction("Teste2"))
             {
-                decimal d = 150.0m;
-                _ = String.Format("{0}", d);
+                Thread.Sleep(150);
             }
         }
     }
